@@ -1,5 +1,6 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { useContainer } from 'class-validator';
 import { AppModule } from './app.module';
 
 /**
@@ -11,6 +12,9 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
+
+    // esto es para que las clases de class-validator puedan usar @Injectable() de nestjs
+    useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
     app.useGlobalPipes(
         new ValidationPipe({
