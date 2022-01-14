@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { User } from '../users/entities';
 import { CreateTuitDto, PaginationQueryDto, UpdateTuitDto } from './dto';
 // own imports
 import { Tuit } from './tuit.entity';
@@ -10,6 +11,8 @@ export class TuitsService {
     constructor(
         @InjectRepository(Tuit)
         private readonly tuitRepository: Repository<Tuit>,
+        @InjectRepository(User)
+        private readonly userRepository: Repository<User>,
     ) {}
 
     async getTuits(pagination: PaginationQueryDto): Promise<Tuit[]> {
@@ -38,8 +41,8 @@ export class TuitsService {
         //findOne retorna undefined si no encuentra el id.
         return await this.tuitRepository.findOne(id, { relations: ['user'] });
     }
-    async createTuit({ message }: CreateTuitDto): Promise<boolean> {
-        const tuit: Tuit = this.tuitRepository.create({ message });
+    async createTuit({ message, user }: CreateTuitDto): Promise<boolean> {
+        const tuit: Tuit = this.tuitRepository.create({ message, user });
         await this.tuitRepository.save(tuit);
         return true;
     }
