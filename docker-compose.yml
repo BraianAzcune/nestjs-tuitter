@@ -6,7 +6,7 @@ services:
     container_name: database
     restart: always
     environment:
-      POSTGRES_DB: postgres
+      POSTGRES_DB: tuitter-api
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: my-weak-password
     volumes:
